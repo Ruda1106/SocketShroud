@@ -1,0 +1,12 @@
+Package: socketshroud
+Version: 1.0
+Architecture: all
+Maintainer: John0n1 <john@on1.no>
+Installed-Size: 9
+Depends: iptables, nmap, net-tools, lsof
+Section: utils
+Priority: optional
+Homepage: https://github.com/John0n1/SocketShroud
+Description: SocketShroud - LAN-level socket cloak and manipulation toolkit.
+ SocketShroud provides real-time socket recon, cloaking, session hijacking/injection,
+ traffic proxying, and decoy service deployment for offensive security operations.

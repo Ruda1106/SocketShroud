@@ -1,0 +1,64 @@
+#!/bin/bash
+set -e
+echo "[SocketShroud] Post-installation: Setting up environment..."
+
+# Check if the script is run as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "[SocketShroud] This script must be run as root."
+    exit 1
+fi
+
+# Create required directories
+if [ ! -d "/opt/socketshroud" ]; then
+    echo "[SocketShroud] Creating /opt/socketshroud directory..."
+    mkdir -p /opt/socketshroud
+fi
+
+if [ ! -d "/etc/socketshroud" ]; then
+    echo "[SocketShroud] Creating /etc/socketshroud directory..."
+    mkdir -p /etc/socketshroud
+fi
+
+# Create config file if it doesn't exist
+if [ ! -f "/etc/socketshroud/config.json" ]; then
+    echo "[SocketShroud] Creating /etc/socketshroud/config.json file..."
+    cat <<EOF > /etc/socketshroud/config.json
+{
+    "log_level": "INFO",
+    "default_proxy_port": 8080
+}
+EOF
+fi
+
+# Create systemd service file if it doesn't exist
+if [ ! -f "/etc/systemd/system/socketshroud.service" ]; then
+    echo "[SocketShroud] Creating /etc/systemd/system/socketshroud.service file..."
+    cat <<EOF > /etc/systemd/system/socketshroud.service
+[Unit]
+Description=SocketShroud Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/socketshroud.sh recon
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+fi
+
+# Reload systemd daemon, enable and start the service
+echo "[SocketShroud] Reloading systemd daemon..."
+systemctl daemon-reload
+
+echo "[SocketShroud] Enabling socketshroud service..."
+systemctl enable socketshroud.service
+
+echo "[SocketShroud] Starting socketshroud service..."
+systemctl start socketshroud.service
+
+echo "[SocketShroud] Installation complete."
+echo "[SocketShroud] You can check the status of the service with: systemctl status socketshroud.service"
+echo "[SocketShroud] You can view the logs with: journalctl -u socketshroud.service"
